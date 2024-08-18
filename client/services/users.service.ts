@@ -1,6 +1,6 @@
 ﻿import {inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import * as types from '../types/types'
+import {User} from "../types/types";
 
 @Injectable({providedIn: 'root'})
 export class UsersService {
@@ -8,7 +8,7 @@ export class UsersService {
     http = inject(HttpClient)
     
     getUsers(next:any){
-        this.http.get(this.url)
+        this.http.get<User>(this.url)
             .subscribe({
                 next,
                 error: error => console.log(error),

@@ -1,24 +1,30 @@
 import {Component, inject, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {HttpClient} from "@angular/common/http";
-import {AngularJSUrlCodec} from "@angular/common/upgrade";
-import {UsersService} from "../../services/users.service";
+import {NavComponent} from "./ui/nav/nav.component";
+import {AccountService} from "../../services/account.service";
+import {HomeComponent} from "./home/home.component";
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    standalone: true,
+    imports: [RouterOutlet, NavComponent, HomeComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   
-    http = inject(HttpClient)
-    usersService = inject(UsersService)
+    accountService = inject(AccountService)
     title = 'Stamper Software Dating';
-    users:any;
+    
     ngOnInit() {
-        this.usersService.getUsers((users:any) => this.users=users)
+        this.setCurrentUser();
     }
 
+    setCurrentUser(){
+        const userString = localStorage.getItem("user");
+        if (!userString) return;
+        const user = JSON.parse(userString);
+        this.accountService.currentUser.set(user);
+    }
+    
 }
